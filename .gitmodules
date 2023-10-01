@@ -1,0 +1,3 @@
+[submodule "nightscout-librelink-up"]
+	path = nightscout-librelink-up
+	url = git@github.com:timoschlueter/nightscout-librelink-up.git

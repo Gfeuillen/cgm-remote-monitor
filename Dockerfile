@@ -1,6 +1,18 @@
+FROM node:20-alpine3.17 as build
+WORKDIR /srv
+COPY nightscout-librelink-up/package*.json /srv/
+RUN npm ci
+COPY nightscout-librelink-up/tsconfig.json /srv/
+COPY nightscout-librelink-up/src /srv/src/
+RUN npm run build
+RUN npm ci --production
+
 FROM node:14.15.3-alpine
 
 LABEL maintainer="Nightscout Contributors"
+
+COPY --from=build /srv/node_modules /srv/node_modules
+COPY --from=build /srv/dist /srv/
 
 WORKDIR /opt/app
 ADD . /opt/app
@@ -20,4 +32,6 @@ RUN npm install --cache /tmp/empty-cache && \
 USER node
 EXPOSE 1337
 
-CMD ["node", "lib/server/server.js"]
+COPY startup-script.sh /opt/app/startup-script.sh
+
+CMD /opt/app/startup-script.sh

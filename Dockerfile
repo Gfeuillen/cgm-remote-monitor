@@ -7,7 +7,7 @@ COPY nightscout-librelink-up/src /srv/src/
 RUN npm run build
 RUN npm ci --production
 
-FROM node:14.15.3-alpine
+FROM node:16.16.0-alpine
 
 LABEL maintainer="Nightscout Contributors"
 
